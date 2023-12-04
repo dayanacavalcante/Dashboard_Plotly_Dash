@@ -5,7 +5,7 @@ Construction of a dasboard using the Dash and Plotly libraries to analyze trends
 
 Data from the analyzed countries can be viewed together or separately.
 
-![](./CO2_emissions_chartjpg.jpg)
+![](./Chart/CO2_emissions_chart.jpg)
 
 Run the app with `dashboard.py`, read the file clean_data.csv, and visit the generated http in your web browser.    
 
