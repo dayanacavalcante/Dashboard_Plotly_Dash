@@ -12,11 +12,11 @@ df = pd.read_csv("clean_data.csv")
 
 # Countries with the highest co2 emissions
 average_co2_emission_by_country = df.groupby('Entity')['Value_co2_emissions_kt_by_country'].mean()
-top_10 = average_co2_emission_by_country.nlargest(10)
-filtered_df = df[df['Entity'].isin(top_10.index)]
+top_5 = average_co2_emission_by_country.nlargest(5)
+filtered_df = df[df['Entity'].isin(top_5.index)]
 
 # Create charts and table
-fig = px.bar(filtered_df, x="Year", y="Value_co2_emissions_kt_by_country", color="Entity", barmode="group")
+fig = px.line(filtered_df, x="Year", y="Value_co2_emissions_kt_by_country", color="Entity") 
 fig_II = px.line(filtered_df, x='Year', y='Electricity from renewables (TWh)', color='Entity')
 fig_III = px.line(filtered_df, x='Year', y='Electricity from fossil fuels (TWh)', color='Entity')
 fig_IV = px.line(filtered_df, x='Year', y='gdp_per_capita', color='Entity')
@@ -37,7 +37,7 @@ app.layout = html.Div(
         'padding': '22px' 
     },
     children=[
-        html.H1(children='Top 10 CO2 Emitting Countries from the years 2000 to 2019',style={'margin-left': '10px'}),
+        html.H1(children='Top 5 CO2 Emitting Countries from the years 2000 to 2019',style={'margin-left': '10px'}),
         html.Span("Trends in CO2 emissions, electricity from fossil fuels and renewable sources, and economic development.", style={'margin-left': '10px','font-size': '18px'}),
         html.H2(children='CO2 emissions in metric tons',style={'margin-left': '10px'}),
     
@@ -89,7 +89,7 @@ app.layout = html.Div(
 )
 def update_output(value):
     if value == "All Countries":
-        fig = px.bar(filtered_df, x="Year", y="Value_co2_emissions_kt_by_country", color="Entity", barmode="group")
+        fig = px.line(filtered_df, x="Year", y="Value_co2_emissions_kt_by_country", color="Entity")
         fig.update_layout(paper_bgcolor='#f2f2f2')
     else:
         filtered_table = df.loc[df['Entity']==value, :]
@@ -104,7 +104,7 @@ def update_output(value):
 
 def update_output_II(value):
     if value == "All Countries":
-        fig_II = px.bar(filtered_df, x="Year", y="Electricity from renewables (TWh)", color="Entity", barmode="group")
+        fig_II = px.line(filtered_df, x="Year", y="Electricity from renewables (TWh)", color="Entity")
         fig_II.update_layout(paper_bgcolor='#f2f2f2')
     else:
         filtered_table = df.loc[df['Entity']==value, :]
@@ -118,7 +118,7 @@ def update_output_II(value):
 )
 def update_output_III(value):
     if value == "All Countries":
-        fig_III = px.bar(filtered_df, x="Year", y="Electricity from fossil fuels (TWh)", color="Entity", barmode="group")
+        fig_III = px.line(filtered_df, x="Year", y="Electricity from fossil fuels (TWh)", color="Entity")
         fig_III.update_layout(paper_bgcolor='#f2f2f2')
     else:
         filtered_table = df.loc[df['Entity']==value, :]
@@ -132,7 +132,7 @@ def update_output_III(value):
 )
 def update_output_IV(value):
     if value == "All Countries":
-        fig_IV = px.bar(filtered_df, x="Year", y="gdp_per_capita", color="Entity", barmode="group")
+        fig_IV = px.line(filtered_df, x="Year", y="gdp_per_capita", color="Entity")
         fig_IV.update_layout(paper_bgcolor='#f2f2f2')
     else:
         filtered_table = filtered_df.loc[df['Entity']==value, :]
