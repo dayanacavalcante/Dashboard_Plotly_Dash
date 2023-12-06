@@ -1,4 +1,4 @@
-### Global Data on Sustainable Energy (2000-2019)
+### Global Data on Sustainable Energy (2000 - 2019)
 
 Build a dasboard using the Dash and Plotly libraries to analyze trends in CO2 emissions, electricity from fossil fuels and renewable sources, and economic development of the 5 countries that emitted the most CO2 between the years 2000 and 2019.
 
