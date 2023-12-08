@@ -8,7 +8,7 @@ import plotly.graph_objs as go
 app = Dash(__name__)
 
 # Read data
-df = pd.read_csv("C:/Users/RenanSardinha/Documents/Dayana/Projects/Dashboard/Data/clean_data.csv")
+df = pd.read_csv("clean_data.csv")
 
 # Countries with the highest CO2 emissions
 average_co2_emission_by_country = df.groupby('Entity')['Value_co2_emissions_kt_by_country'].mean()
@@ -23,7 +23,7 @@ fig_III = px.line(filtered_df, x='Year', y='Electricity from fossil fuels (TWh)'
 fig_IV = px.line(filtered_df, x='Year', y='gdp_per_capita', color='Entity')
 fig_V = px.scatter(filtered_df, x='gdp_per_capita', y='Value_co2_emissions_kt_by_country', color='Entity')
 fig_VI = go.Figure(data=[go.Table(
-    header=dict(values=['Entity', 'Year', 'Value_co2_emissions_kt_by_country', 'Electricity from fossil fuels (TWh)', 'Electricity from renewables (TWh)']),
+    header=dict(values=['Entity', 'Year', f'{co2_str} emissions', 'Electricity from fossil fuels (TWh)', 'Electricity from renewables (TWh)']),
     cells=dict(values=[filtered_df['Entity'], filtered_df['Year'], filtered_df['Value_co2_emissions_kt_by_country'],
                            filtered_df['Electricity from fossil fuels (TWh)'],filtered_df['Electricity from renewables (TWh)']])
 )])
@@ -64,20 +64,21 @@ app.layout = html.Div(
             style={'backgroundColor': '#f2f2f2', 'padding': '20px'}
         ),
         
-        html.H2(children='Gross domestic product (GDP) per person',style={'margin-left': '15px', 'margin-bottom': '10px'}),
+        html.H2(children='Gross domestic product (GDP) per capita',style={'margin-left': '15px', 'margin-bottom': '10px'}),
         dcc.Graph(
             id='gdp_per_capita',
             figure=fig_IV,
             style={'backgroundColor': '#f2f2f2', 'padding': '20px'}
         ),
         
-        html.H2(children=f'{co2_str} emissions and GDP per capita',style={'margin-left': '15px', 'margin-bottom': '10px'}),
+        html.H2(children=f'Relationship between {co2_str} emissions and GDP per capita',style={'margin-left': '15px','margin-bottom': '10px'}),
         dcc.Graph(
             id='gdp_per_capita_vs_co2',
             figure=fig_V,
             style={'backgroundColor': '#f2f2f2', 'padding': '20px'}
         ), 
         
+        html.H2(children='Comparative data by year',style={'margin-left': '15px', 'margin-bottom': '10px'}),
         dcc.Graph(
             id='table',
             figure=fig_VI,
@@ -149,11 +150,11 @@ def update_output_IV(value):
 def update_output_V(value):
     if value == "All Countries":
         fig_V = px.scatter(filtered_df, x='gdp_per_capita', y='Value_co2_emissions_kt_by_country', color='Entity')
-        fig_V.update_layout(paper_bgcolor='#f2f2f2', yaxis_title=f"{co2_str} emissions",xaxis_title="GDP per capita")
+        fig_V.update_layout(paper_bgcolor='#f2f2f2', yaxis_title=f"{co2_str} emissions (metric tons)",xaxis_title="GDP per capita")
     else:
         filtered_table = filtered_df.loc[df['Entity']==value, :]
         fig_V = px.scatter(filtered_table, x='gdp_per_capita', y='Value_co2_emissions_kt_by_country', color='Entity')
-        fig_V.update_layout(paper_bgcolor='#f2f2f2', yaxis_title=f"{co2_str} emissions",xaxis_title="GDP per capita")
+        fig_V.update_layout(paper_bgcolor='#f2f2f2', yaxis_title=f"{co2_str} emissions (metric tons)",xaxis_title="GDP per capita")
     return fig_V
 
 @app.callback(
@@ -163,7 +164,7 @@ def update_output_V(value):
 def update_output_V(value):
     if value == "All Countries":
         fig_VI = go.Figure(data=[go.Table(
-        header=dict(values=['Entity', 'Year', 'Value_co2_emissions_kt_by_country', 'Electricity from fossil fuels (TWh)', 'Electricity from renewables (TWh)']),
+        header=dict(values=['Entity', 'Year', f'{co2_str} emissions', 'Electricity from fossil fuels (TWh)', 'Electricity from renewables (TWh)']),
         cells=dict(values=[filtered_df['Entity'], filtered_df['Year'], filtered_df['Value_co2_emissions_kt_by_country'],
                            filtered_df['Electricity from fossil fuels (TWh)'],filtered_df['Electricity from renewables (TWh)']])
         )])
@@ -171,7 +172,7 @@ def update_output_V(value):
     else:
         filtered_table = filtered_df.loc[df['Entity']==value, :]
         fig_VI = go.Figure(data=[go.Table(
-        header=dict(values=['Entity', 'Year', 'Value_co2_emissions_kt_by_country', 'Electricity from fossil fuels (TWh)', 'Electricity from renewables (TWh)']),
+        header=dict(values=['Entity', 'Year', f'{co2_str} emissions', 'Electricity from fossil fuels (TWh)', 'Electricity from renewables (TWh)']),
         cells=dict(values=[filtered_table['Entity'], filtered_table['Year'], filtered_table['Value_co2_emissions_kt_by_country'],
                            filtered_table['Electricity from fossil fuels (TWh)'],filtered_table['Electricity from renewables (TWh)']])
 )])
